@@ -3,7 +3,8 @@
 ```markdown
 # JavaScript 学习仓库
 
-欢迎来到我的 JavaScript 学习仓库！这个仓库包含我在跟随 [Jonas Schmedtmann](https://www.udemy.com/user/jonasschmedtmann/) 的 JavaScript 课程过程中编写的代码和项目。
+欢迎来到我的 JavaScript 学习仓库！这个仓库包含我在跟随 [Jonas Schmedtmann](https://www.udemy.com/user/jonasschmedtmann/)
+的 JavaScript 课程过程中编写的代码和项目。
 
 ## 目录
 
@@ -59,7 +60,8 @@
 
 ## 鸣谢
 
-特别感谢 [Jonas Schmedtmann](https://www.udemy.com/user/jonasschmedtmann/) 提供的精彩课程和在我掌握 JavaScript 过程中给予的指导。
+特别感谢 [Jonas Schmedtmann](https://www.udemy.com/user/jonasschmedtmann/) 
+提供的精彩课程和在我掌握 JavaScript 过程中给予的指导。
 ```
 
 你可以根据需要填写项目名称和描述，更新链接，以及根据实际情况添加或修改内容。希望这对你有帮助！
