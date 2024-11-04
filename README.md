@@ -26,7 +26,7 @@
 - **项目 2**: [项目名称 / 描述]
 - **项目 3**: [项目名称 / 描述]
 
-*(可以根据需要添加更多项目)*
+_(可以根据需要添加更多项目)_
 
 ## 使用的技术
 
@@ -39,6 +39,7 @@
 要在本地获取此仓库并运行，请按照以下简单步骤操作：
 
 1. 克隆仓库
+
    ```
    bash
    git clone https://github.com/你的用户名/你的仓库名称.git
@@ -58,7 +59,7 @@
 
 ## 鸣谢
 
-特别感谢 [Jonas Schmedtmann](https://www.udemy.com/user/jonasschmedtmann/) 
+特别感谢 [Jonas Schmedtmann](https://www.udemy.com/user/jonasschmedtmann/)
 提供的精彩课程和在我掌握 JavaScript 过程中给予的指导。
 
 你可以根据需要填写项目名称和描述，更新链接，以及根据实际情况添加或修改内容。希望这对你有帮助！
