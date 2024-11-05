@@ -5,6 +5,21 @@
 //   '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
 
 // Data needed for first part of the section
+
+const openingHours = {
+  thu: {
+    open: 12,
+    close: 22,
+  },
+  fri: {
+    open: 11,
+    close: 23,
+  },
+  sat: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
 const restaurant = {
   name: 'Classico Italiano',
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
@@ -13,20 +28,7 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
+  openingHours,
 
   order: function (starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
@@ -57,6 +59,89 @@ const restaurant = {
   },
 };
 
+/*
+const properties = Object.keys(openingHours);
+// console.log(properties);
+
+let openStr = `We are open on ${properties.length} days: `;
+
+for (const day of properties) {
+  openStr += `${day}, `;
+}
+// console.log(openStr);
+
+const values = Object.values(openingHours);
+// console.log(values);
+
+// Entire object
+const entries = Object.entries(openingHours);
+console.log(entries);
+
+//  !const [day, { open, close }]来分解entries，就可以直接使用了
+for (const [day, { open, close }] of entries) {
+  // console.log(entry[0], entry[1]);
+  console.log(`We will work on ${day} day, open at ${open}, close at ${close}`);
+}
+
+// console.log(restaurant.openingHours.thu?.open);
+// const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+// for (const element of menu) console.log(element);
+// console.log('--------------------');
+// menu.forEach((element) => {
+//   console.log(element);
+// });
+
+/*
+const rest1 = {
+  name: 'Capri',
+  numGuests: 0,
+};
+
+const rest2 = {
+  name: 'La Piazza',
+  owner: 'Giovanni Rossi',
+};
+
+// rest1.numGuests = rest1.numGuests || 10;
+// rest2.numGuests = rest2.numGuests || 10;
+
+rest1.numGuests ??= 10;
+rest2.numGuests ??= 10;
+console.log(rest1);
+console.log(rest2);
+
+/*
+restaurant.numGuests = 0;
+const guest = restaurant.numGuests || 10;
+console.log(guest);
+
+// Nullish: null and undefined
+const guestCorrect = restaurant.numGuests ?? 10;
+console.log(guestCorrect);
+
+/*
+// ||中第一个数是truthy value，直接返回
+console.log(3 || 'Jonas');
+
+// restaurant.numGuests = 15;
+const guest1 = restaurant.numGuests ? restaurant.numGuests : 10;
+console.log(guest1);
+
+const guest2 = restaurant.numGuests || 10;
+console.log(guest2);
+
+console.log('----------------AND-------------------');
+
+console.log(0 && 'Jonas');
+console.log(7 && undefined && 'Jonas');
+
+if (restaurant.orderPizza) {
+  // restaurant.orderPizza('mushrooms', 'spinach');
+}
+
+restaurant.orderPizza && restaurant.orderPizza('mushrooms', 'spinach');
+
+/*
 //SPREAD
 const arr = [1, 2, ...[3, 4]];
 const [a, b, ...others] = [1, 2, 3, 4, 5, 6, 7];
@@ -189,4 +274,105 @@ const nested = [2, 4, [5, 6]];
 // console.log(i, j);
 const [i, , [j, k]] = nested;
 console.log(i, j, k);
+*/
+
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
+
+// Challenge #2
+//1.
+for (const [i, player] of game.scored.entries()) {
+  // console.log();
+  console.log(`Goal ${i + 1}: ${player}`);
+}
+
+//2.计算game.odds中的三个数的平均数
+let average = 0;
+const odds = Object.values(game.odds);
+for (const odd of odds) {
+  average += odd;
+}
+average /= odds.length;
+console.log(average);
+
+//3.
+for (const [team, odd] of Object.entries(game.odds)) {
+  const teamStr = team === 'x' ? 'draw' : `victory ${game[team]}`;
+  console.log(`Odd of ${teamStr} ${odd}`);
+}
+
+console.log('-----------------');
+// BONUS
+// So the solution is to loop over the array, and add the array elements as object properties, and then increase the count as we encounter a new occurence of a certain element
+//  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+const scorers = {};
+for (const player of game.scored) {
+  scorers[player] ? scorers[player]++ : (scorers[player] = 1);
+}
+
+/*
+// 1.
+const [players1, players2] = game.players;
+// 2.
+const [gk, ...filedPlayers] = players1;
+// 3.
+const allPlayers = [...players1, ...players2];
+// 4.
+const players1Final = [...players1, 'Thiago', 'Coutinho', 'Perisic'];
+// 5.
+const {
+  odds: { team1, x: draw, team2 },
+} = game;
+console.log(team1, draw, team2);
+
+//6.
+const printGoal = function (...players) {
+  console.log(players);
+  console.log(`${players.length} goals were scored`);
+};
+
+// printGoal('Davies', 'Muller', 'Lewandowski', 'Kimmich');
+// printGoal('Davies', 'Muller');
+printGoal(...game.scored);
+
+// 7.
+team1<team2
 */
