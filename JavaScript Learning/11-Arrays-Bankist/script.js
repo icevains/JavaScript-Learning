@@ -83,6 +83,45 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+calcDisplayBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+
+  const out = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(out)}€`;
+
+  const interest = movements
+    .filter((mov) => mov > 0)
+    .map((deposit) => (deposit * 1.2) / 100)
+    .filter((int, i, arr) => {
+      return int >= 1;
+    })
+    .reduce((acc, inte) => acc + inte, 0);
+  labelSumInterest.textContent = `${Math.abs(interest)}€`;
+};
+calcDisplaySummary(account1.movements);
+
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map((name) => name.at(0))
+      .join('');
+  });
+};
+createUsernames(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -93,7 +132,7 @@ displayMovements(account1.movements);
 //   ['GBP', 'Pound sterling'],
 // ]);
 
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -236,3 +275,124 @@ checkDogs(juliaData1, kateData1);
 console.log('-------TEST2-------');
 checkDogs(juliaData2, kateData2);
 */
+
+/*
+// map()返回带有新元素的新数组，原数组不被改变
+const eurToUsd = 1.1;
+
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const movementsUsd = movements.map((mov) => Math.floor(mov * eurToUsd));
+console.log(movements);
+console.log(movementsUsd);
+
+const movementsDescriptions = movements.map((mov, i, arr) => {
+  if (mov > 0) {
+    console.log(`Movement ${i + 1}: You deposited ${mov}`);
+  } else {
+    console.log(`Movement ${i + 1}: You withdrew ${Math.abs(mov)}`);
+  }
+});
+*/
+
+/*
+const deposit = movements.filter(function (mov) {
+  return mov > 0;
+});
+console.log(movements);
+console.log(deposit);
+
+const withdrawals = movements.filter((mov) => mov < 0);
+console.log(withdrawals);
+*/
+
+/*
+console.log(movements);
+
+// accumulator
+const balance = movements.reduce((acc, cur) => acc + cur, 0);
+console.log(balance);
+*/
+
+// const max = movements.reduce((acc, mov) => {
+//   return Math.max(acc, mov);
+// }, movements.at(0));
+// console.log(max);
+
+///////////////////////////////////////
+// Coding Challenge #2
+
+/* 
+Let's go back to Julia and Kate's study about dogs. This time, they want to convert dog ages to human ages and calculate the average age of the dogs in their study.
+
+Create a function 'calcAverageHumanAge', which accepts an arrays of dog's ages ('ages'), and does the following things in order:
+
+1. Calculate the dog age in human years using the following formula: if the dog is <= 2 years old, humanAge = 2 * dogAge. If the dog is > 2 years old, humanAge = 16 + dogAge * 4.
+2. Exclude all dogs that are less than 18 human years old (which is the same as keeping dogs that are at least 18 years old)
+3. Calculate the average human age of all adult dogs (you should already know from other challenges how we calculate averages 😉)
+4. Run the function for both test datasets
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
+*/
+
+/*
+const calcAverageHumanAge = function (ages) {
+  // 1.换算dogAge -> humanAge,并且排除了小于18岁的
+  const humanAges = ages
+    .map((age) => (age <= 2 ? age * 2 : 16 + age * 4))
+    .filter((age) => age >= 18);
+
+  // 2.直接计算平均值，reduce()得到总和 / 长度
+  const avgAge =
+    humanAges.reduce((acc, age) => acc + age, 0) / humanAges.length;
+  console.log(avgAge);
+};
+
+const testData1 = [5, 2, 4, 1, 15, 8, 3];
+const testData2 = [16, 6, 10, 5, 6, 1, 4];
+
+calcAverageHumanAge(testData1);
+*/
+
+// const eurToUsd = 1.1;
+// const totalDepositsUSD = movements
+//   .filter((mov) => mov > 0)
+//   .map((mov) => mov * eurToUsd)
+//   .reduce((acc, mov) => acc + mov, 0);
+// console.log(totalDepositsUSD);
+
+///////////////////////////////////////
+// Coding Challenge #3
+
+/* 
+Rewrite the 'calcAverageHumanAge' function from the previous challenge, but this time as an arrow function, and using chaining!
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
+*/
+
+const calcAverageHumanAge = function (ages) {
+  // 1.换算dogAge -> humanAge,并且排除了小于18岁的
+  const humanAges = ages
+    .map((age) => (age <= 2 ? age * 2 : 16 + age * 4))
+    .filter((age) => age >= 18);
+
+  // 2.直接计算平均值，reduce()得到总和 / 长度
+  const avgAge =
+    humanAges.reduce((acc, age) => acc + age, 0) / humanAges.length;
+  console.log(avgAge);
+};
+
+const calcAverageHumanAge2 = (ages) =>
+  ages
+    .map((age) => (age <= 2 ? age * 2 : 16 + age * 4))
+    .filter((age) => age >= 18)
+    .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+
+const avg1 = calcAverageHumanAge2([5, 2, 4, 1, 15, 8, 3]);
+const avg2 = calcAverageHumanAge2([16, 6, 10, 5, 6, 1, 4]);
+console.log(avg1, avg2);
