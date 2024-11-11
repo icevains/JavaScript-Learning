@@ -61,6 +61,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+// 展示交易记录
 const displayMovements = function (movements) {
   // 清空容器
   containerMovements.innerHTML = '';
@@ -81,36 +82,36 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', hmtl);
   });
 };
-displayMovements(account1.movements);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance}€`;
+// 展示余额
+const calcDisplayBalance = function (account) {
+  account.balance = account.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${account.balance}€`;
 };
-calcDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+// 展示流水
+const calcDisplaySummary = function (account) {
+  const incomes = account.movements
     .filter((mov) => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumIn.textContent = `${incomes}€`;
 
-  const out = movements
+  const out = account.movements
     .filter((mov) => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
   labelSumOut.textContent = `${Math.abs(out)}€`;
 
-  const interest = movements
+  const interest = account.movements
     .filter((mov) => mov > 0)
-    .map((deposit) => (deposit * 1.2) / 100)
+    .map((deposit) => (deposit * account.interestRate) / 100)
     .filter((int, i, arr) => {
       return int >= 1;
     })
     .reduce((acc, inte) => acc + inte, 0);
   labelSumInterest.textContent = `${Math.abs(interest)}€`;
 };
-calcDisplaySummary(account1.movements);
 
+// 'Steven Thomas Williams' => stw
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -121,6 +122,112 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
+
+// 更新UI
+const updateUI = function (acc) {
+  // Display movements
+  displayMovements(acc.movements);
+
+  // Display balance
+  calcDisplayBalance(acc);
+
+  // Display summary
+  calcDisplaySummary(acc);
+};
+
+// 登录
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  // 防止表单提交
+  e.preventDefault();
+
+  currentAccount = accounts.find(
+    (acc) => acc.username === inputLoginUsername.value
+  );
+
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    // 清空输入框
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
+
+    // Display UI and message
+    labelWelcome.textContent = `Welcome back, ${currentAccount.owner
+      .split(' ')
+      .at(0)}`;
+
+    containerApp.style.opacity = 100;
+
+    updateUI(currentAccount);
+  }
+});
+
+// 转账功能
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    (acc) => acc.username === inputTransferTo.value
+  );
+
+  // 清空输入框
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  // 对转账金额的判断
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    // 转账
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+
+    // 更新UI
+    updateUI(currentAccount);
+  }
+});
+
+// 贷款功能，存款必须大于等于贷款金额的10%
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((mov) => mov >= amount * 0.1)
+  ) {
+    // 增加金额
+    currentAccount.movements.push(amount);
+
+    // 更新UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+
+// 删除账号
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  //只能删除自己
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      (acc) => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+  inputClosePin.blur();
+});
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -375,6 +482,7 @@ TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 GOOD LUCK 😀
 */
 
+/*
 const calcAverageHumanAge = function (ages) {
   // 1.换算dogAge -> humanAge,并且排除了小于18岁的
   const humanAges = ages
@@ -396,3 +504,21 @@ const calcAverageHumanAge2 = (ages) =>
 const avg1 = calcAverageHumanAge2([5, 2, 4, 1, 15, 8, 3]);
 const avg2 = calcAverageHumanAge2([16, 6, 10, 5, 6, 1, 4]);
 console.log(avg1, avg2);
+*/
+
+// Find Method,返回第一个满足条件的值
+// const firstWithDrawal = movements.find((mov) => mov < 0);
+// console.log(firstWithDrawal);
+
+// console.log(accounts);
+// const account = accounts.find((acc) => acc.owner === 'Jessica Davis');
+// console.log(account);
+
+console.log(movements);
+
+// 只能测试相等
+console.log(movements.includes(-130));
+
+// 可以包含条件
+const anyDeposits = movements.some((mov) => mov > 5000);
+console.log(anyDeposits);
